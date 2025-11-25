@@ -23,13 +23,28 @@ function getAllJsFiles(folderPath) {
         }
 
         const files = fs.readdirSync(folderPath);
-        const jsFiles = files.filter(file => 
-            file.endsWith('.js') && 
-            file !== 'documentation-generator.js' &&
-            fs.statSync(path.join(folderPath, file)).isFile()
-        );
+        let jsFiles = [];
+
+        for (const file of files) {
+            const fullPath = path.join(folderPath, file);
+            
+            try {
+                const fileStats = fs.statSync(fullPath);
+
+                if (fileStats.isDirectory()) {
+                    const subFolderJsFiles = getAllJsFiles(fullPath);
+                    jsFiles = jsFiles.concat(subFolderJsFiles);
+                } else if (file.endsWith('.js') && 
+                           file !== 'documentation-generator.js' && 
+                           fileStats.isFile()) {
+                    jsFiles.push(fullPath);
+                }
+            } catch (error) {
+                continue;
+            }
+        }
         
-        return jsFiles.map(file => path.join(folderPath, file));
+        return jsFiles;
     } catch (error) {
         return [];
     }
@@ -61,13 +76,13 @@ function parseJavaScriptFile(filePath) {
         }
 
         return {
-            filePath: path.basename(filePath),
+            filePath: filePath,
             functions: functions
         };
 
     } catch (error) {
         return {
-            filePath: path.basename(filePath),
+            filePath: filePath,
             functions: []
         };
     }
