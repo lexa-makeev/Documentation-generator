@@ -1,0 +1,8 @@
+node_modules/
+package-lock.json
+
+*.docx
+*.backup
+JS_Project_Documentation.docx
+
+.npm

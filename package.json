@@ -1,0 +1,14 @@
+{
+    "name": "js-documentation-generator",
+    "version": "1.0.0",
+    "description": "Генератор документации для JavaScript проектов",
+    "main": "documentation-generator.js",
+    "scripts": {
+        "docs": "node documentation-generator.js src",
+        "docs-current": "node documentation-generator.js .",
+        "game": "node number-game.js"
+    },
+    "dependencies": {
+        "docx": "^8.0.0"
+    }
+}
